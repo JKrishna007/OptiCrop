@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+
+{% block title %}OptiCrop — Smart Crop Recommendation Engine{% endblock %}
+
+{% block content %}
+<!-- ─── Loading Overlay ─────────────────────────────────────────────── -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner-border spinner-grow-accent" role="status" style="width:3rem;height:3rem;">
+        <span class="visually-hidden">Analyzing…</span>
+    </div>
+    <span class="loading-text">Analyzing soil & climate data…</span>
+</div>
+
+<!-- ─── Hero ────────────────────────────────────────────────────────── -->
+<section class="hero-section">
+    <div class="container">
+        <span class="hero-badge">
+            <i class="bi bi-cpu"></i> AI-Powered Agriculture
+        </span>
+        <h1 class="hero-title">
+            Grow Smarter with<br/>
+            <span class="gradient-text">OptiCrop</span>
+        </h1>
+        <p class="hero-subtitle">
+            Enter your soil &amp; environmental parameters below, and our machine-learning
+            engine will recommend the ideal crop for maximum yield and sustainability.
+        </p>
+    </div>
+</section>
+
+<!-- ─── Stats Row ───────────────────────────────────────────────────── -->
+<section class="container mb-4">
+    <div class="row g-3 justify-content-center">
+        <div class="col-6 col-md-3">
+            <div class="stat-item glass-card py-3">
+                <div class="stat-value">22</div>
+                <div class="stat-label">Crops</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-item glass-card py-3">
+                <div class="stat-value">7</div>
+                <div class="stat-label">Parameters</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-item glass-card py-3">
+                <div class="stat-value">99%</div>
+                <div class="stat-label">Accuracy</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stat-item glass-card py-3">
+                <div class="stat-value">5</div>
+                <div class="stat-label">ML Models</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ─── Prediction Form ─────────────────────────────────────────────── -->
+<section class="container pb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-7">
+            <div class="form-card">
+                <h2 class="form-card-title"><i class="bi bi-sliders2"></i> Crop Recommendation</h2>
+                <p class="form-card-subtitle">Fill in soil nutrients &amp; environmental conditions</p>
+
+                <!-- Quick-fill -->
+                <div class="quickfill-bar">
+                    <span class="text-muted me-1" style="font-size:0.8rem;align-self:center;">Quick fill:</span>
+                    <button type="button" class="btn-quickfill" id="qf-rice"
+                            data-n="80" data-p="45" data-k="45"
+                            data-temp="24" data-hum="85" data-ph="6.5" data-rain="220">
+                        🌾 Rice
+                    </button>
+                    <button type="button" class="btn-quickfill" id="qf-maize"
+                            data-n="78" data-p="48" data-k="22"
+                            data-temp="22" data-hum="66" data-ph="6.2" data-rain="85">
+                        🌽 Maize
+                    </button>
+                    <button type="button" class="btn-quickfill" id="qf-coffee"
+                            data-n="100" data-p="22" data-k="30"
+                            data-temp="26" data-hum="58" data-ph="6.5" data-rain="160">
+                        ☕ Coffee
+                    </button>
+                    <button type="button" class="btn-quickfill" id="qf-banana"
+                            data-n="100" data-p="80" data-k="50"
+                            data-temp="28" data-hum="80" data-ph="6.0" data-rain="105">
+                        🍌 Banana
+                    </button>
+                    <button type="button" class="btn-quickfill" id="qf-cotton"
+                            data-n="120" data-p="50" data-k="20"
+                            data-temp="25" data-hum="80" data-ph="7.0" data-rain="80">
+                        🏵️ Cotton
+                    </button>
+                </div>
+
+                <!-- Errors -->
+                {% if errors %}
+                <div class="alert-danger-custom" role="alert">
+                    <strong><i class="bi bi-exclamation-triangle"></i> Please fix the following:</strong>
+                    <ul class="mt-2">
+                        {% for err in errors %}
+                        <li>{{ err }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                {% if error %}
+                <div class="alert-danger-custom" role="alert">
+                    <i class="bi bi-exclamation-triangle"></i> {{ error }}
+                </div>
+                {% endif %}
+
+                <!-- Form -->
+                <form action="/predict" method="POST" id="predictForm" novalidate>
+                    <div class="row g-3">
+                        <!-- Nitrogen -->
+                        <div class="col-md-6">
+                            <div class="input-wrapper">
+                                <div class="form-floating">
+                                    <input type="number" step="any" class="form-control" id="inputN" name="N"
+                                           placeholder="Nitrogen" min="0" max="200" required
+                                           value="{{ form_data.N if form_data else '' }}">
+                                    <label for="inputN">Nitrogen (N) — kg/ha</label>
+                                </div>
+                                <i class="bi bi-droplet-fill input-icon"></i>
+                            </div>
+                        </div>
+                        <!-- Phosphorous -->
+                        <div class="col-md-6">
+                            <div class="input-wrapper">
+                                <div class="form-floating">
+                                    <input type="number" step="any" class="form-control" id="inputP" name="P"
+                                           placeholder="Phosphorous" min="0" max="200" required
+                                           value="{{ form_data.P if form_data else '' }}">
+                                    <label for="inputP">Phosphorous (P) — kg/ha</label>
+                                </div>
+                                <i class="bi bi-droplet-fill input-icon"></i>
+                            </div>
+                        </div>
+                        <!-- Potassium -->
+                        <div class="col-md-6">
+                            <div class="input-wrapper">
+                                <div class="form-floating">
+                                    <input type="number" step="any" class="form-control" id="inputK" name="K"
+                                           placeholder="Potassium" min="0" max="300" required
+                                           value="{{ form_data.K if form_data else '' }}">
+                                    <label for="inputK">Potassium (K) — kg/ha</label>
+                                </div>
+                                <i class="bi bi-droplet-fill input-icon"></i>
+                            </div>
+                        </div>
+                        <!-- Temperature -->
+                        <div class="col-md-6">
+                            <div class="input-wrapper">
+                                <div class="form-floating">
+                                    <input type="number" step="any" class="form-control" id="inputTemp" name="temperature"
+                                           placeholder="Temperature" min="-10" max="55" required
+                                           value="{{ form_data.temperature if form_data else '' }}">
+                                    <label for="inputTemp">Temperature — °C</label>
+                                </div>
+                                <i class="bi bi-thermometer-half input-icon"></i>
+                            </div>
+                        </div>
+                        <!-- Humidity -->
+                        <div class="col-md-6">
+                            <div class="input-wrapper">
+                                <div class="form-floating">
+                                    <input type="number" step="any" class="form-control" id="inputHum" name="humidity"
+                                           placeholder="Humidity" min="0" max="100" required
+                                           value="{{ form_data.humidity if form_data else '' }}">
+                                    <label for="inputHum">Humidity — %</label>
+                                </div>
+                                <i class="bi bi-moisture input-icon"></i>
+                            </div>
+                        </div>
+                        <!-- pH -->
+                        <div class="col-md-6">
+                            <div class="input-wrapper">
+                                <div class="form-floating">
+                                    <input type="number" step="any" class="form-control" id="inputPh" name="ph"
+                                           placeholder="pH" min="0" max="14" required
+                                           value="{{ form_data.ph if form_data else '' }}">
+                                    <label for="inputPh">pH Level — 0 to 14</label>
+                                </div>
+                                <i class="bi bi-graph-up input-icon"></i>
+                            </div>
+                        </div>
+                        <!-- Rainfall -->
+                        <div class="col-12">
+                            <div class="input-wrapper">
+                                <div class="form-floating">
+                                    <input type="number" step="any" class="form-control" id="inputRain" name="rainfall"
+                                           placeholder="Rainfall" min="0" max="500" required
+                                           value="{{ form_data.rainfall if form_data else '' }}">
+                                    <label for="inputRain">Rainfall — mm</label>
+                                </div>
+                                <i class="bi bi-cloud-rain input-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-accent btn-lg" id="predictBtn">
+                            <i class="bi bi-search"></i>&ensp;Get Crop Recommendation
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

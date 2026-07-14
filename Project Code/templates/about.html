@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+
+{% block title %}OptiCrop — About & Methodology{% endblock %}
+
+{% block content %}
+<section class="about-section">
+    <div class="container">
+
+        <!-- Header -->
+        <div class="text-center mb-5" style="padding-top:2rem;">
+            <span class="hero-badge"><i class="bi bi-book"></i> Documentation</span>
+            <h1 class="section-title">How <span class="gradient-text">OptiCrop</span> Works</h1>
+            <p class="section-subtitle">A deep dive into the methodology behind our crop recommendation engine</p>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-4 animate-on-scroll">
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h5>Data-Driven</h5>
+                    <p>Trained on 2,200+ agricultural samples spanning 22 different crops with 7 environmental features.</p>
+                </div>
+            </div>
+            <div class="col-md-4 animate-on-scroll">
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h5>ML-Powered</h5>
+                    <p>Compares 5 algorithms — KNN, Logistic Regression, Decision Tree, Random Forest, and Naive Bayes — and selects the best.</p>
+                </div>
+            </div>
+            <div class="col-md-4 animate-on-scroll">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h5>Instant Results</h5>
+                    <p>Sub-second predictions served through a lightweight Flask backend with pre-loaded model artifacts.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Methodology -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-10">
+                <div class="glass-card animate-on-scroll">
+                    <h3 class="mb-3"><i class="bi bi-gear-wide-connected"></i> Methodology</h3>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <h6 class="text-accent fw-bold">Input Parameters</h6>
+                            <ul style="color:var(--text-secondary);line-height:2;">
+                                <li><strong>Nitrogen (N)</strong> — Ratio of nitrogen content in soil (kg/ha)</li>
+                                <li><strong>Phosphorous (P)</strong> — Ratio of phosphorous content in soil (kg/ha)</li>
+                                <li><strong>Potassium (K)</strong> — Ratio of potassium content in soil (kg/ha)</li>
+                                <li><strong>Temperature</strong> — Average temperature (°C)</li>
+                                <li><strong>Humidity</strong> — Relative humidity (%)</li>
+                                <li><strong>pH Level</strong> — Soil acidity/alkalinity (0–14)</li>
+                                <li><strong>Rainfall</strong> — Annual rainfall (mm)</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-accent fw-bold">ML Pipeline</h6>
+                            <ol style="color:var(--text-secondary);line-height:2;">
+                                <li>Load &amp; clean the agricultural dataset</li>
+                                <li>Handle missing values &amp; outliers</li>
+                                <li>Encode crop labels with LabelEncoder</li>
+                                <li>Scale features with StandardScaler</li>
+                                <li>Split into 80% train / 20% test (stratified)</li>
+                                <li>Train 5 algorithms &amp; evaluate metrics</li>
+                                <li>Select the best-performing model</li>
+                                <li>Persist model + scaler + encoder as .pkl</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Algorithms Comparison -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-10">
+                <div class="glass-card animate-on-scroll">
+                    <h3 class="mb-3"><i class="bi bi-bar-chart-line"></i> Algorithms Compared</h3>
+                    <div class="table-responsive">
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Algorithm</th>
+                                    <th>Type</th>
+                                    <th>Key Strength</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>K-Nearest Neighbors</strong></td>
+                                    <td>Instance-based</td>
+                                    <td>Simple, effective for small datasets</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Logistic Regression</strong></td>
+                                    <td>Linear classifier</td>
+                                    <td>Interpretable probability estimates</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Decision Tree</strong></td>
+                                    <td>Tree-based</td>
+                                    <td>Highly interpretable, captures non-linear patterns</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Random Forest</strong> ⭐</td>
+                                    <td>Ensemble</td>
+                                    <td>Best accuracy; robust to overfitting</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Naive Bayes</strong></td>
+                                    <td>Probabilistic</td>
+                                    <td>Very fast; good baseline classifier</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Supported Crops -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-10">
+                <div class="glass-card animate-on-scroll">
+                    <h3 class="mb-3"><i class="bi bi-flower1"></i> 22 Supported Crops</h3>
+                    <div class="d-flex flex-wrap gap-2">
+                        {% set crops = [
+                            ("🌾", "Rice"), ("🌽", "Maize"), ("🫘", "Chickpea"),
+                            ("🫘", "Kidney Beans"), ("🌱", "Pigeon Peas"), ("🌱", "Moth Beans"),
+                            ("🌱", "Mung Bean"), ("🌱", "Black Gram"), ("🥣", "Lentil"),
+                            ("🍎", "Pomegranate"), ("🍌", "Banana"), ("🥭", "Mango"),
+                            ("🍇", "Grapes"), ("🍉", "Watermelon"), ("🍈", "Muskmelon"),
+                            ("🍎", "Apple"), ("🍊", "Orange"), ("🍈", "Papaya"),
+                            ("🥥", "Coconut"), ("🏵️", "Cotton"), ("🌿", "Jute"), ("☕", "Coffee")
+                        ] %}
+                        {% for emoji, name in crops %}
+                        <span class="btn-quickfill" style="cursor:default;">{{ emoji }} {{ name }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Use Case Scenarios -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-10">
+                <h3 class="text-center mb-4"><i class="bi bi-people"></i> Use Cases</h3>
+                <div class="row g-4">
+                    <div class="col-md-4 animate-on-scroll">
+                        <div class="scenario-card">
+                            <div class="scenario-number">1</div>
+                            <h6 class="fw-bold">Smart Crop Recommendation</h6>
+                            <p class="text-muted mb-0" style="font-size:0.88rem;">
+                                Farmers enter soil and environmental details to receive
+                                personalized crop recommendations for maximum yield.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 animate-on-scroll">
+                        <div class="scenario-card">
+                            <div class="scenario-number">2</div>
+                            <h6 class="fw-bold">Suitability Assessment</h6>
+                            <p class="text-muted mb-0" style="font-size:0.88rem;">
+                                Evaluate whether current soil and climate conditions
+                                are suitable for a particular crop before planting.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 animate-on-scroll">
+                        <div class="scenario-card">
+                            <div class="scenario-number">3</div>
+                            <h6 class="fw-bold">Research & Policy</h6>
+                            <p class="text-muted mb-0" style="font-size:0.88rem;">
+                                Researchers and policymakers analyze crop-environment
+                                relationships for sustainable agricultural strategies.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- API Documentation -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-10">
+                <div class="glass-card animate-on-scroll">
+                    <h3 class="mb-3"><i class="bi bi-braces"></i> REST API</h3>
+                    <p class="text-muted">Programmatic access to crop recommendations:</p>
+                    <div style="background:var(--surface);border-radius:var(--radius-md);padding:1rem;font-family:monospace;font-size:0.88rem;overflow-x:auto;">
+                        <span style="color:var(--accent);">GET</span> /api/predict?N=80&amp;P=45&amp;K=45&amp;temperature=24&amp;humidity=85&amp;ph=6.5&amp;rainfall=220
+                    </div>
+                    <p class="text-muted mt-2 mb-0" style="font-size:0.85rem;">
+                        Returns JSON: <code>{ "crop": "rice", "confidence": 99.2, "season": "Kharif", ... }</code>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="text-center mt-4 pb-4">
+            <a href="/" class="btn btn-accent btn-lg">
+                <i class="bi bi-rocket-takeoff"></i>&ensp;Try OptiCrop Now
+            </a>
+        </div>
+
+    </div>
+</section>
+{% endblock %}

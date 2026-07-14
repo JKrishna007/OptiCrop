@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}OptiCrop — Recommendation: {{ result.crop | capitalize }}{% endblock %}
+
+{% block content %}
+<section class="result-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-xl-7">
+                <div class="result-card">
+
+                    <!-- Crop emoji & name -->
+                    <span class="result-emoji">{{ result.emoji }}</span>
+                    <h1 class="result-crop">{{ result.crop }}</h1>
+
+                    <!-- Confidence badge -->
+                    <div class="result-confidence">
+                        <i class="bi bi-bullseye"></i>
+                        {{ result.confidence }}% Confidence
+                    </div>
+
+                    <!-- Season & Tip -->
+                    <div class="result-info-grid">
+                        <div class="result-info-item">
+                            <div class="result-info-label">Best Season</div>
+                            <div class="result-info-value">{{ result.season }}</div>
+                        </div>
+                        <div class="result-info-item">
+                            <div class="result-info-label">Crop Type</div>
+                            <div class="result-info-value" style="text-transform:capitalize;">{{ result.crop }}</div>
+                        </div>
+                    </div>
+
+                    <!-- Growing tips -->
+                    <div class="tip-card">
+                        <div class="tip-title"><i class="bi bi-lightbulb"></i> Growing Tip</div>
+                        <div class="tip-text">{{ result.tip }}</div>
+                    </div>
+
+                    <!-- Input Parameters Summary -->
+                    <h6 class="text-start mt-4 mb-2" style="color:var(--text-muted);font-size:0.8rem;text-transform:uppercase;letter-spacing:0.06em;">
+                        Your Input Parameters
+                    </h6>
+                    <table class="params-table">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><i class="bi bi-droplet-fill text-muted me-1"></i> Nitrogen (N)</td>
+                                <td>{{ result.input_params.N }} kg/ha</td>
+                            </tr>
+                            <tr>
+                                <td><i class="bi bi-droplet-fill text-muted me-1"></i> Phosphorous (P)</td>
+                                <td>{{ result.input_params.P }} kg/ha</td>
+                            </tr>
+                            <tr>
+                                <td><i class="bi bi-droplet-fill text-muted me-1"></i> Potassium (K)</td>
+                                <td>{{ result.input_params.K }} kg/ha</td>
+                            </tr>
+                            <tr>
+                                <td><i class="bi bi-thermometer-half text-muted me-1"></i> Temperature</td>
+                                <td>{{ result.input_params.temperature }} °C</td>
+                            </tr>
+                            <tr>
+                                <td><i class="bi bi-moisture text-muted me-1"></i> Humidity</td>
+                                <td>{{ result.input_params.humidity }} %</td>
+                            </tr>
+                            <tr>
+                                <td><i class="bi bi-graph-up text-muted me-1"></i> pH Level</td>
+                                <td>{{ result.input_params.ph }}</td>
+                            </tr>
+                            <tr>
+                                <td><i class="bi bi-cloud-rain text-muted me-1"></i> Rainfall</td>
+                                <td>{{ result.input_params.rainfall }} mm</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Actions -->
+                    <div class="d-flex flex-wrap gap-3 justify-content-center mt-4">
+                        <a href="/" class="btn btn-accent">
+                            <i class="bi bi-arrow-repeat"></i>&ensp;Try Again
+                        </a>
+                        <a href="/about" class="btn btn-outline-accent">
+                            <i class="bi bi-info-circle"></i>&ensp;How It Works
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
